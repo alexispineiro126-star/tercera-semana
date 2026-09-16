@@ -1,12 +1,12 @@
 const panaderia = []
 
 function agregarproducto() {
-    let producto = (prompt("agregue el nombre del productos que desea comprar: \n1.pan \n2.galletitas \n3.facturas \n4.chipitas "))
+    let producto = (prompt("Agregue el nombre del productos que desea comprar: \n1.Pan \n2.Galletitas \n3.Facturas \n4.Chipitas \n5Torta "))
     panaderia.push(producto)
 }
 function agregarproducto2() {
-    let producto = (prompt("agregue otro producto: \n1.pan \n2.galletitas \n3.facturas \n4.chipitas"))
-    panaderia.push(producto)
+    let producto = (prompt("Agregue otro producto: \n1.Pan \n2.Galletitas \n3.Facturas \n4.Chipitas \n5Torta"))
+    panaderia.unshift(producto)
 }
 
 const mostrarproductos = function(){
@@ -17,13 +17,13 @@ const mostrarproductos = function(){
     }
 }
 function eliminarproductos(){
-    let eliminar = prompt("eliminar algún producto:")
-    let posicion = panaderia.indexOf(eliminar)
-    if (posicion !== -1){
+    let eliminar = prompt("Eliminar algún producto:")
+    if (panaderia.includes(eliminar)){
+        let  posicion =  panaderia.indexOf(eliminar)
         panaderia.splice(posicion,1)
-    alert("producto eliminado")
+    alert("Producto eliminado")
     }else{
-        alert("ese prodcuto no existe")
+        alert("Ese prodcuto no existe")
     }
 }
 let consulta = "si"
