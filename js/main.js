@@ -1,26 +1,39 @@
-let consulta = "si";
+const panaderia = []
 
+function agregarproducto() {
+    let producto = (prompt("agregue el nombre del productos que desea comprar: \n1.pan \n2.galletitas \n3.facturas \n4.chipitas "))
+    panaderia.push(producto)
+}
+function agregarproducto2() {
+    let producto = (prompt("agregue otro producto: \n1.pan \n2.galletitas \n3.facturas \n4.chipitas"))
+    panaderia.push(producto)
+}
+
+const mostrarproductos = function(){
+    let mensaje = "agregaste estos productos:\n"
+    for (const mostrar of panaderia) {
+        mensaje += mostrar + "\n"
+        alert(mensaje)
+    }
+}
+function eliminarproductos(){
+    let eliminar = prompt("eliminar algún producto:")
+    let posicion = panaderia.indexOf(eliminar)
+    if (posicion !== -1){
+        panaderia.splice(posicion,1)
+    alert("producto eliminado")
+    }else{
+        alert("ese prodcuto no existe")
+    }
+}
+let consulta = "si"
 while (consulta === "si") {
+agregarproducto()
+agregarproducto2()
+mostrarproductos()
+eliminarproductos()
 
-let precio = parseInt(prompt("Ingrese el precio del producto:"));
-let cantidad = parseInt(prompt("Ingrese la cantidad del producto:"));
-let descuento = parseInt(prompt("Ingrese el porcentaje de descuento:"));
-
-function calculartotal(precio, cantidad) {
-    return precio * cantidad;
+consulta = prompt("¿Desea agregar otro producto? (si/no)").toLowerCase();
 }
 
-const aplicardescuento = function(total, descuento) {
-    return total - (total * descuento / 100);
-}
 
-const total = (total) => {
-    alert("El total a pagar es: $" + total);
-}
-
-let totalSinDescuento = calculartotal(precio, cantidad);
-let totalConDescuento = aplicardescuento(totalSinDescuento, descuento);
-total(totalConDescuento);
-
-consulta = prompt("¿Desea realizar otra compra? (si/no)").toLowerCase();
-}
