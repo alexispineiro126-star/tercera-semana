@@ -26,7 +26,7 @@ if(cantidad <= this.stock){
 
 const panaderia = [
     new productos ("pan","baguettes", 1000, 50),
-    new productos ("galletitas","Divercion", 2000, 50),
+    new productos ("galletitas","Diversión", 2000, 50),
     new productos ("facturas","central", 1400,12),
     new productos ("chipitas","Doña laura", 1200,5 ),
     new productos ("torta","todo dulce", 1500, 4)
@@ -43,7 +43,7 @@ const mostrarproductos = function(){
 }
 
 function venderprductos(){
-    let opciones = parseInt(prompt(`elija el producto que desea \n1`))
+    let opciones = parseInt(prompt(`elija el producto que desea \n1. pan \n2. galletitas \n3. facturas \n4. chipitas \n5. torta`))
     let elegido = panaderia [opciones - 1]
     if (elegido){
         let cantidad = parseInt(prompt(`cuantos ${elegido.nombre} desea?`))
