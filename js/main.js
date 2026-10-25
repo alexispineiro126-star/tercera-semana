@@ -1,159 +1,247 @@
-class productos {
-    constructor(id, nombre, marca, precio, stock) {
-        this.id = id
-        this.nombre = nombre
-        this.marca = marca
-        this.precio = precio
-        this.stock = stock
+const URL = "./datos/dato.json"
+let productos = []
+
+fetch (URL)
+.then(Response =>Response.json())
+.then((data) =>{
+    productos = data
+    restaurarCarrito()
+    renderizarProductos(data)
+    actualizarCarrito()
+}).catch((error) =>{
+    console.log("error", error)
+})
+
+const descuento = 0.20
+const precioConDescuento = (precio) =>(precio * (1 - descuento))
+
+const listaProductos = document.getElementById("productos")
+const listaCarrito = document.getElementById("lista")
+const panelCarrito = document.querySelector(".carrito")
+const busqueda = document.getElementById("busqueda")
+const totalCarrito = document.getElementById("total")
+const comprar = document.getElementById("compra")
+
+let carrito = []
+
+function restaurarCarrito() {
+    const carritoGuardado = localStorage.getItem("carrito")
+    if (carritoGuardado === null) {
+        return
     }
 
-    Vender(cantidad) {
-        if (cantidad <= this.stock) {
-            this.stock -= cantidad
-            alert("Compraste " + cantidad + " de " + this.nombre + "\nCantidad disponible ahora: " + this.stock + " de " + this.nombre + "\nmarca: " + this.marca + "\nprecio final: " + cantidad * this.precio)
-        } else {
-            alert("no hay suficiente cantidad de stok de " + this.stock)
+    let productosGuardados
+    try {
+        productosGuardados = JSON.parse(carritoGuardado)
+    } catch (error) {
+        console.error("No se pudo leer el carrito guardado:", error)
+        return
+    }
+
+    if (!Array.isArray(productosGuardados)) {
+        console.error("El carrito guardado no tiene un formato válido.")
+        return
+    }
+
+    productosGuardados.forEach((productoGuardado) => {
+        const producto = productos.find((item) => item.id === productoGuardado.id)
+        if (producto !== undefined && productoGuardado.cantidad > 0) {
+            const cantidadFinal = productoGuardado.cantidad > producto.stock
+                ? producto.stock
+                : productoGuardado.cantidad
+            carrito.push({
+                id: producto.id,
+                cantidad: cantidadFinal
+            })
         }
-    }
+    })
+}
 
-    aplicardescuento(aplicar) {
-        if (aplicar < 0 || aplicar > 100) {
-            alert("El descuento debe estar entre 0 y 100")
+
+setTimeout(() => {
+    Swal.fire({
+    title: "20% OFF en todos los productos.",
+    width: 600,
+    padding: "3em",
+    color: "#ff0000",
+    background: "#fff url(/images/trees.png)",
+    backdrop: `
+    rgba(0, 0, 0, 0.4)
+    url("/images/nyan-cat.gif")
+    left top
+    no-repeat`
+});
+}, 2000)
+
+comprar.addEventListener("click", async () => {
+    if (carrito.length === 0) {
+        Swal.fire({
+            icon: "error",
+            title: "Error, el carrito esta vacio",
+            text: "Something went wrong!",
+
+        })
+        return
+    }
+    try {
+        await new Promise((resolve) => {
+            setTimeout(resolve, 2000)
+        })
+        Swal.fire({
+            title: "Compra exitosa",
+            icon: "success",
+            draggable: true
+        })
+    } catch (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Error, el carrito esta vacio",
+            text: "Something went wrong!",
+        })
+    } finally {
+        console.log("proceso de compra finalizado")
+    }
+})
+
+function guardarCarrito() {
+    localStorage.setItem("carrito", JSON.stringify(carrito))
+    actualizarCarrito()
+}
+
+function buscarEnCarrito(id) {
+    return carrito.find( (item) => {
+        return item.id === id
+    })
+}
+
+function agregarAlCarrito(id) {
+    const producto = productos.find( (item) => {
+        return item.id === id
+    })
+    const productoEnCarrito = buscarEnCarrito(id)
+
+if (productoEnCarrito !== undefined) {
+    if (productoEnCarrito.cantidad < producto.stock) {
+        productoEnCarrito.cantidad++
+    }
+} else if (producto.stock > 0) {
+    carrito.push({ id: producto.id, cantidad: 1 })
+}
+guardarCarrito()
+}
+
+function cambiarCantidad(id, cambio) {
+    const producto = productos.find( (item) => {
+        return item.id === id
+    })
+    const productoEnCarrito = buscarEnCarrito(id)
+    if (productoEnCarrito === undefined) {
+        return
+    }
+productoEnCarrito.cantidad += cambio
+
+if (productoEnCarrito.cantidad <= 0) {
+    eliminarDelCarrito(id)
+    return
+}
+
+if (productoEnCarrito.cantidad > producto.stock) {
+    productoEnCarrito.cantidad = producto.stock
+}
+guardarCarrito()
+}
+
+function eliminarDelCarrito(id) {
+    carrito = carrito.filter( (item) =>{
+        return item.id !== id
+    })
+    guardarCarrito()
+}
+
+function renderizarProductos() {
+    listaProductos.innerHTML = ""
+    productos.forEach( (producto) => {
+        listaProductos.innerHTML += 
+        `<article class="box">
+        <h3 class= "">${producto.nombre}</h3>
+        <p> marca: ${producto.marca}</p> 
+        <p class="precio">
+            <span class="precio-original">$${producto.precio}</span>
+            <span class="precio-descuento">$${precioConDescuento(producto.precio)}</span>
+            <span class="etiqueta-descuento">20% OFF</span>
+        </p>
+        <P>Disponible: ${producto.stock}</P>
+        <button type="button" class="btn" data-id="${producto.id}" ${producto.stock === 0 ? "disabled" : ""}>
+        + Agregar al carrito</button></article>`
+    })
+    const botones = listaProductos.querySelectorAll(".btn")
+    botones.forEach((boton) => {
+        boton.addEventListener("click", () => {
+            agregarAlCarrito(Number(boton.dataset.id))
+        })
+    })
+}
+
+function actualizarCarrito() {
+    listaCarrito.innerHTML= ""
+    let total = 0
+    carrito.forEach( (item) => {
+        const producto = productos.find( (productoCatalogo) => {
+            return productoCatalogo.id === item.id
+        })
+        if(producto === undefined) {
             return
         }
-        const precioAnterior = this.precio
-        const descuento = this.precio * aplicar / 100
-        this.precio = this.precio - descuento
-        alert("Descuento aplicado a " + this.nombre + " " + this.marca + "\nPrecio anterior: " + precioAnterior + "\nPrecio final: " + this.precio)
-    }
-}
-
-const panaderia = [
-    new productos(1, "pan", "baguettes", 1000, 50),
-    new productos(2, "galletitas", "Diversión", 2000, 50),
-    new productos(3, "facturas", "central", 1400, 12),
-    new productos(4, "chipitas", "Doña laura", 1200, 5),
-    new productos(5, "torta", "todo dulce", 1500, 4)
-]
-
-const mostrarproductos = function() {
-    let mensaje = "Productos disponibles de la panaderia:\n\n "
-    panaderia.forEach(function(mostrar, indice) {
-        mensaje += (indice + 1) + ". " + mostrar.nombre + " marca: " + mostrar.marca + " - precio:  " + mostrar.precio + " - Disponibles:  " + mostrar.stock + "\n\n"
-    })
-    alert(mensaje)
-}
-
-const carrito = []
-
-function venderproductos() {
-    let opciones = parseInt(prompt("Ingresá del 1 al 5 para comprar el prodcuto que deseá"))
-    let elegido = panaderia.find(producto => producto.id === opciones)
-    if (elegido) {
-        let cantidad = parseInt(prompt("¿Cuántos " + elegido.nombre + " deseás?"))
-        if (cantidad > 0 && cantidad <= elegido.stock) {
-            elegido.Vender(cantidad)
-            carrito.push({
-                producto: elegido.nombre,
-                cantidad: cantidad,
-                subtotal: cantidad * elegido.precio
-            })
-            const totalCarrito = carrito.reduce(
-                (total, compra) => total + compra.subtotal,
-                0
-            )
-            alert("Total acumulado de tu carrito: $" + totalCarrito)
-        } else {
-            alert("Ingresá una cantidad válida y disponible.")
-        }
-    } else {
-        alert("No existe producto con ese número, elija del 1 al 5.")
-    }
-}
-
-function mostrarCarrito() {
-    if (carrito.length === 0) {
-        alert("El carrito está vacío.")
-    }
-    let mensaje = "Compras de tu carrito:\n\n"
-    carrito.forEach(function(compra, indice) {
-        mensaje += (indice + 1) + ". " + compra.cantidad + " de " + compra.producto + " - subtotal: $" + compra.subtotal + "\n"
-    })
-    const totalCarrito = carrito.reduce(
-        (total, compra) => total + compra.subtotal,
-        0
-    )
-    mensaje += "\nTotal: $" + totalCarrito
-    alert(mensaje)
-}
-
-function quitarUltimo() {
-    if (carrito.length === 0) {
-        alert("El carrito está vacío.")
-    }
-    const quitar = carrito.pop()
-    const cambiarproducto = panaderia.find(function(producto) {
-        return producto.nombre === quitar.producto
-    })
-    if (cambiarproducto) {
-        cambiarproducto.stock += quitar.cantidad
-    }
-    alert("Se quitó del carrito la compra de " + quitar.cantidad + " de " + quitar.producto + ". El stock fue actualizado.")
-}
-
-function aplicardescuentoproductos() {
-    let opciones = parseInt(prompt("Que producto desea aplicar el descuento"))
-    let elegido = panaderia[opciones - 1]
-    if (elegido) {
-        let cantidad = parseInt(prompt("Cuanto es el descuento % que desea aplicar al produdcto " + elegido.nombre + "?"))
-        elegido.aplicardescuento(cantidad)
-    } else {
-        alert("elegi según el orden de los productos del 1 al 5")
-    }
-}
-
-function buscarProducto() {
-    const busqueda = prompt("Escribí el nombre del producto que buscás:").toLowerCase()
-    const resultados = panaderia.filter(producto =>
-        producto.nombre.toLowerCase().includes(busqueda)
-    )
-    if (resultados.length > 0) {
-        let mensaje = "Productos encontrados:\n\n"
-        resultados.forEach(function(producto) {
-            mensaje += producto.id + ". " + producto.nombre + "  Marca: " + producto.marca + "  Precio: $" + producto.precio + "  Stock: " + producto.stock + "\n\n"
+        const elemento = document.createElement("li")
+        elemento.innerHTML= `
+        <span>${producto.nombre} - <del>$${producto.precio.toLocaleString("es-AR")}</del> $${precioConDescuento(producto.precio).toLocaleString("es-AR")}</span>
+        <div class = "controles-cantidad">
+        <button type= "button" class= "btn-restar">-</button>
+        <span>${item.cantidad}</span>
+        <button type= "button" class="btn-sumar">+</button>
+        </div>
+        <button type= "button" class= "btn-eliminar">Eliminar</button>`
+        elemento.querySelector(".btn-eliminar").addEventListener("click", ()=>{
+            eliminarDelCarrito(producto.id)
         })
-        alert(mensaje)
-    } else {
-        alert("No encontramos productos con ese nombre, porfavor revise el menú.")
-    }
+        elemento.querySelector(".btn-restar").addEventListener("click", ()=>{
+            cambiarCantidad(producto.id, -1)
+        })
+        elemento.querySelector(".btn-sumar").addEventListener("click",()=>{
+            if(item.cantidad >= producto.stock){
+                return
+            }
+            cambiarCantidad(producto.id, 1)
+        })
+        listaCarrito.appendChild(elemento)
+        total += precioConDescuento(producto.precio) * item.cantidad
+    })
+    totalCarrito.textContent = `Total: $${total.toLocaleString("es-AR")}`
 }
 
-let consulta = "si"
+function filtrarProductos() {
+    const texto = busqueda.value.toLocaleLowerCase()
+    const tarjetas = listaProductos.querySelectorAll(".box")
 
-while (consulta === "si") {
-    let opciones = parseInt(prompt("Que desea hacer?\n1. Ver el menú: \n2. Comprar productos de la tienda   \n3. Aplicar descuento \n4. Buscar productos\n5. Ver carrito\n6. Quitar última compra del carrito"))
-    switch (opciones) {
-        case 1:
-            mostrarproductos()
-            break
-        case 2:
-            venderproductos()
-            break
-        case 3:
-            aplicardescuentoproductos()
-            break
-        case 4:
-            buscarProducto()
-            break
-        case 5:
-            mostrarCarrito()
-            break
-        case 6:
-            quitarUltimo()
-            break
-        default:
-            alert("Opcion invalida, elija del 1 al 6")
-    }
-
-    consulta = prompt("Deseas volver al inicio? (si/no)").toLowerCase()
+    tarjetas.forEach( (tarjeta) => {
+        const nombre = tarjeta.querySelector("h3").textContent.toLocaleLowerCase()
+        tarjeta.classList.toggle("oculto", !nombre.includes(texto))
+    })
 }
+
+document.getElementById("vaciar").addEventListener("click", () => {
+    carrito = []
+    guardarCarrito()
+})
+
+document.getElementById("ver-carrito").addEventListener("click", () => {
+    panelCarrito.classList.add("active")
+})
+
+document.querySelector(".cerrar").addEventListener("click", () => {
+    panelCarrito.classList.remove("active")
+})
+
+busqueda.addEventListener("input", filtrarProductos)
+
+actualizarCarrito()

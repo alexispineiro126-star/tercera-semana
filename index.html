@@ -1,12 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panadería</title>
     <script defer src="./js/main.js"></script>
-    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <h1>semana 4</h1>
+    <header class="header">
+        <input type="search" id="busqueda" class="input" placeholder="Buscar productos..." aria-label="Buscar productos">
+    </header>
+    <div id="alerta" class="alerta" role="status" aria-live="polite"></div>
+    <h1 class="h1">Panadería</h1>
+    <section class="section">
+        <button id="ver-carrito" class="abrir" type="button" aria-label="Abrir carrito"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+<path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+</svg></button>
+        <div class="carrito">
+            <button class="cerrar" type="button" aria-label="Cerrar carrito">X</button>
+            <h3>Carrito</h3>
+            <ul id="lista"></ul>
+            <p class="total" id="total">Total: $0</p>
+            <button class="comprar" id="compra">comprar</button>
+            <button class="vaciar" id="vaciar">Vaciar carrito</button>
+        </div>
+    </section>
+    <main class="main" id="productos" aria-live="polite"></main>
 </body>
 </html>
