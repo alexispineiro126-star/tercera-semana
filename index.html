@@ -35,11 +35,15 @@
         <button id="ver-carrito" class="abrir" type="button" aria-label="Abrir carrito" aria-controls="panel-carrito" aria-expanded="false"><i class="bi bi-cart-fill"></i></button>
         <div class="carrito" id="panel-carrito" aria-hidden="true">
             <button class="cerrar" type="button" aria-label="Cerrar carrito">X</button>
-            <h3 class="h3"><i class="bi bi-cart-fill"></i>Carrito</h3>
-            <ul id="lista"></ul>
-            <p class="total" id="total">Total: $0</p>
-            <button class="comprar" id="compra">comprar</button>
-            <button class="vaciar" id="vaciar">Vaciar carrito</button>
+            <div class="carrito-contenido">
+                <h3 class="h3"><i class="bi bi-cart-fill"></i>Carrito</h3>
+                <ul id="lista"></ul>
+                <p class="total" id="total">Total: $0</p>
+            </div>
+            <div class="carrito-acciones">
+                <button class="comprar" id="compra">comprar</button>
+                <button class="vaciar" id="vaciar">Vaciar carrito</button>
+            </div>
         </div>
     </section>
     <main class="main" id="productos" aria-live="polite"></main>

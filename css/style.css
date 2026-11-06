@@ -408,23 +408,47 @@ button:disabled {
         right: 8px;
         width:90%;
         height: 90%;
-        overflow-y: auto;
+        overflow: hidden;
         padding: 16px;
         border-radius: 20px;
     }
 
-    #lista {
-        padding-bottom: 130px;
+    .carrito-contenido {
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+        overflow-y: auto;
+        padding-bottom: 120px;
+        box-sizing: border-box;
+    }
+
+    .total {
+        position: static;
+        margin: 8px 0;
+    }
+
+    .carrito-acciones {
+        position: absolute;
+        right: 16px;
+        bottom: 16px;
+        left: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding-top: 8px;
+        background-color: inherit;
     }
 
     .comprar {
-        right: auto;
-        left: 10%;
-        bottom: 72px;
+        position: static;
+        transform: none;
         width: 80%;
     }
 
     .vaciar {
-        bottom: 12px;
+        position: static;
+        transform: none;
+        width: 80%;
     }
 }
