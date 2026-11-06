@@ -9,7 +9,7 @@
     },
     {
         "id": 2,
-        "nombre": "chipitas",
+        "nombre": "Chipitas",
         "imagen": "./assets/chipitas.png",
         "marca": "doña laura",
         "precio": 1000,
@@ -33,7 +33,7 @@
     },
     {
         "id": 5,
-        "nombre": "alfajores",
+        "nombre": "Alfajores",
         "imagen": "./assets/alfajores.png",
         "marca": "GIGA",
         "precio": 1500,
