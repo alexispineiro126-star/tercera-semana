@@ -6,21 +6,36 @@
     <title>Panadería</title>
     <script defer src="./js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css?v=2">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="header">
         <input type="search" id="busqueda" class="input" placeholder="Buscar productos..." aria-label="Buscar productos">
+        <button id="modo-oscuro" class="btn btn-outline-light" type="button" aria-pressed="false">
+            <i id="icono-modo" class="bi bi-moon-stars-fill me-2" aria-hidden="true"></i>
+            <span id="texto-modo"></span>
+        </button>
     </header>
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="title">Bienvenido a nuestra Panadería</h1>
+                <p class="description">Disfruta de nuestros productos frescos y deliciosos.</p>
+            </div>
+        <div class="hero-image-container">
+            <img src="./assets/portada.jpg" alt="portada de la panadería" class="hero-image">
+        </div>
+    </section>
     <div id="alerta" class="alerta" role="status" aria-live="polite"></div>
-    <h1 class="h1">Panadería</h1>
     <section class="section">
-        <button id="ver-carrito" class="abrir" type="button" aria-label="Abrir carrito"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-<path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-</svg></button>
-        <div class="carrito">
+        <button id="ver-carrito" class="abrir" type="button" aria-label="Abrir carrito" aria-controls="panel-carrito" aria-expanded="false"><i class="bi bi-cart-fill"></i></button>
+        <div class="carrito" id="panel-carrito" aria-hidden="true">
             <button class="cerrar" type="button" aria-label="Cerrar carrito">X</button>
-            <h3>Carrito</h3>
+            <h3 class="h3"><i class="bi bi-cart-fill"></i>Carrito</h3>
             <ul id="lista"></ul>
             <p class="total" id="total">Total: $0</p>
             <button class="comprar" id="compra">comprar</button>
@@ -28,5 +43,8 @@
         </div>
     </section>
     <main class="main" id="productos" aria-live="polite"></main>
+    <footer class="footer">
+        <p>© 2024 Panadería. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>

@@ -1,7 +1,42 @@
 [
-    { "id": 1, "nombre": "pan", "marca": "baguettes", "precio": 1000, "stock": 50 },
-    { "id": 2, "nombre": "galletitas", "marca": "Diversión", "precio": 2000, "stock": 50 },
-    { "id": 3, "nombre": "facturas", "marca": "central", "precio": 1400, "stock": 12 },
-    { "id": 4, "nombre": "chipitas", "marca": "Doña Laura", "precio": 1200, "stock": 5 },
-    { "id": 5, "nombre": "torta", "marca": "todo dulce", "precio": 1500, "stock": 4 }
+    {
+        "id": 1,
+        "nombre": "Pan",
+        "imagen": "./assets/pan.png",
+        "marca": "Baguets",
+        "precio": 500,
+        "stock": 10
+    },
+    {
+        "id": 2,
+        "nombre": "chipitas",
+        "imagen": "./assets/chipitas.png",
+        "marca": "doña laura",
+        "precio": 1000,
+        "stock": 30
+    },
+    {
+        "id": 3,
+        "nombre": "Facturas",
+        "imagen": "./assets/facturas.jpg",
+        "marca": "Todo dulce",
+        "precio": 850,
+        "stock": 20
+    },
+    {
+        "id": 4,
+        "nombre": "Tortas",
+        "imagen": "./assets/torta.png",
+        "marca": "La tortería",
+        "precio": 350,
+        "stock": 4
+    },
+    {
+        "id": 5,
+        "nombre": "alfajores",
+        "imagen": "./assets/alfajores.png",
+        "marca": "GIGA",
+        "precio": 1500,
+        "stock": 50
+    }
 ]
