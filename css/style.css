@@ -401,3 +401,30 @@ button:disabled {
 .noti.mostrar {
     opacity: 1;
 }
+
+@media (max-width: 480px) {
+    .carrito {
+        top: 8px;
+        right: 8px;
+        width:90%;
+        height: 90%;
+        overflow-y: auto;
+        padding: 16px;
+        border-radius: 20px;
+    }
+
+    #lista {
+        padding-bottom: 130px;
+    }
+
+    .comprar {
+        right: auto;
+        left: 10%;
+        bottom: 72px;
+        width: 80%;
+    }
+
+    .vaciar {
+        bottom: 12px;
+    }
+}
