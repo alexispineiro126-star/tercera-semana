@@ -301,7 +301,7 @@ checkoutForm.addEventListener("submit", async (event) => {
         
         const detalleProductos = pedido.map((item) =>
             `• ${item.nombre} x ${item.cantidad} ($${item.precioUnitario.toLocaleString("es-AR")} c/u): $${item.subtotal.toLocaleString("es-AR")}`
-        )("\n")
+        ).join("\n")
         const metodosPago = {
             efectivo: "Efectivo al recibir",
             transferencia: "Transferencia",
@@ -318,7 +318,7 @@ checkoutForm.addEventListener("submit", async (event) => {
             detalleProductos,
             "",
             `Total a pagar: $${totalPedido.toLocaleString("es-AR")}`
-        ]("\n")
+        ].join("\n")
         const confirmacion = await Swal.fire({
             title: "Revisá tu pedido",
             text: resumenPedido,
