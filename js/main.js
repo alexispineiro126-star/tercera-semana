@@ -279,85 +279,85 @@ checkoutForm.addEventListener("submit", async (event) => {
     checkoutEnProceso = true
     botonConfirmar.textContent = "Procesando compra..."
 
-    try {
-        const pedido = carrito.map(({ id, cantidad }) => {
-            const producto = productos.find(({ id: idProducto }) => idProducto === id)
-            if (producto === undefined) {
-                return null
-            }
-            const precioUnitario = precioConDescuento(producto.precio)
-            return {
-                nombre: producto.nombre,
-                cantidad,
-                precioUnitario,
-                subtotal: precioUnitario * cantidad
-            }
-        })
-        if (pedido.some((item) => item === null)) {
-            throw new Error("Uno o más productos del carrito ya no están disponibles.")
+try {
+    const pedido = carrito.map(({ id, cantidad }) => {
+        const producto = productos.find(({ id: idProducto }) => idProducto === id)
+        if (producto === undefined) {
+            return null
         }
-        
-        const totalPedido = pedido.reduce((total, item) => total + item.subtotal, 0)
-        
-        const detalleProductos = pedido.map((item) =>
-            `• ${item.nombre} x ${item.cantidad} ($${item.precioUnitario.toLocaleString("es-AR")} c/u): $${item.subtotal.toLocaleString("es-AR")}`
-        ).join("\n")
-        const metodosPago = {
-            efectivo: "Efectivo al recibir",
-            transferencia: "Transferencia",
-            tarjeta: "Tarjeta (simulada)"
+        const precioUnitario = precioConDescuento(producto.precio)
+        return {
+            nombre: producto.nombre,
+            cantidad,
+            precioUnitario,
+            subtotal: precioUnitario * cantidad
         }
-        const resumenPedido = [
-            `Cliente: ${cliente.nombre}`,
-            `Teléfono: ${cliente.telefono}`,
-            `Dirección: ${cliente.direccion}`,
-            `Email: ${cliente.email}`,
-            `Pago: ${metodosPago[cliente.metodoPago]}`,
-            "",
-            "Productos:",
-            detalleProductos,
-            "",
-            `Total a pagar: $${totalPedido.toLocaleString("es-AR")}`
-        ].join("\n")
-        const confirmacion = await Swal.fire({
-            title: "Revisá tu pedido",
-            text: resumenPedido,
-            customClass: { htmlContainer: "comprobante-texto" },
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonText: "Confirmar compra",
-            cancelButtonText: "Volver a editar"
-        })
-        if (!confirmacion.isConfirmed) {
-            return
-        }
-        await cargarCompra()
-        carrito.forEach(({ id, cantidad }) => {
-            const producto = productos.find(({ id: idProducto }) => idProducto === id)
-            producto.stock -= cantidad
-        })
-        carrito = []
-        guardarCarrito()
-        renderizarProductos()
-        actualizarCarrito()
-        checkout.hidden = true
-        checkoutForm.reset()
-        panelCarrito.classList.remove("active")
-        await Swal.fire({
-            title: "Comprobante de compra",
-            text: `${resumenPedido}\n\nEstado: compra confirmada. ¡Gracias por tu compra!`,
-            customClass: { htmlContainer: "comprobante-texto" },
-            icon: "success"
-        })
-    } catch (error) {
-        await Swal.fire({
-            icon: "error",
-            title: "No se pudo completar la compra",
-            text: error.message
-        })
-    } finally {
-        checkoutEnProceso = false
-        botonConfirmar.textContent = textoOriginal
+    })
+    if (pedido.some((item) => item === null)) {
+        throw new Error("Uno o más productos del carrito ya no están disponibles.")
+    }
+    
+    const totalPedido = pedido.reduce((total, item) => total + item.subtotal, 0)
+    
+    const detalleProductos = pedido.map((item) =>
+        `• ${item.nombre} x ${item.cantidad} ($${item.precioUnitario.toLocaleString("es-AR")} c/u): $${item.subtotal.toLocaleString("es-AR")}`
+    ).join("\n")
+    const metodosPago = {
+        efectivo: "Efectivo al recibir",
+        transferencia: "Transferencia",
+        tarjeta: "Tarjeta de crédito o débito"
+    }
+    const resumenPedido = [
+        `Cliente: ${cliente.nombre}`,
+        `Teléfono: ${cliente.telefono}`,
+        `Dirección: ${cliente.direccion}`,
+        `Email: ${cliente.email}`,
+        `Pago: ${metodosPago[cliente.metodoPago]}`,
+        "",
+        "Productos:",
+        detalleProductos,
+        "",
+        `Total a pagar: $${totalPedido.toLocaleString("es-AR")}`
+    ].join("\n")
+    const confirmacion = await Swal.fire({
+        title: "Revisá tu pedido",
+        text: resumenPedido,
+        customClass: { htmlContainer: "comprobante-texto" },
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Confirmar compra",
+        cancelButtonText: "Volver a editar"
+    })
+    if (!confirmacion.isConfirmed) {
+        return
+    }
+    await cargarCompra()
+    carrito.forEach(({ id, cantidad }) => {
+        const producto = productos.find(({ id: idProducto }) => idProducto === id)
+        producto.stock -= cantidad
+    })
+    carrito = []
+    guardarCarrito()
+    renderizarProductos()
+    actualizarCarrito()
+    checkout.hidden = true
+    checkoutForm.reset()
+    panelCarrito.classList.remove("active")
+    await Swal.fire({
+        title: "Comprobante de compra",
+        text: `${resumenPedido}\n\nEstado: compra confirmada. ¡Gracias por tu compra!`,
+        customClass: { htmlContainer: "comprobante-texto" },
+        icon: "success"
+    })
+} catch (error) {
+    await Swal.fire({
+        icon: "error",
+        title: "No se pudo completar la compra",
+        text: error.message
+    })
+} finally {
+    checkoutEnProceso = false
+    botonConfirmar.textContent = textoOriginal
     }
 })
 
